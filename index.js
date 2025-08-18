@@ -84,5 +84,8 @@ button.addEventListener("click", () => {
         },
       ])
     );
+
+    body.innerHTML = "";
+    createHomePage();
   }
 });
