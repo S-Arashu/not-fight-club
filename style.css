@@ -41,7 +41,8 @@ body {
   border-radius: 30px;
 }
 
-.registration-field__button {
+.registration-field__button,
+.button_fight {
   padding: 3%;
   border-radius: 50px;
   border: 1px solid #d2893c;
@@ -49,8 +50,18 @@ body {
   cursor: pointer;
 }
 
-.registration-field__button:hover {
+.button_fight {
+  margin-left: calc(44%);
+  margin-top: calc(30%);
+}
+
+.registration-field__button:hover,
+.button_fight:hover {
   background-color: #d2893c;
+}
+
+.greeting_text {
+  text-align: center;
 }
 
 .tooltip {

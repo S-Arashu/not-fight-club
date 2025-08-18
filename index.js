@@ -5,8 +5,9 @@ const body = document.querySelector("body");
 if (!localStorage.getItem("character")) {
   initialPage();
 } else {
-  let gamer = JSON.parse(localStorage.getItem("character"));
-  console.log(gamer);
+  // let gamer = JSON.parse(localStorage.getItem("character"));
+  // console.log(gamer);
+  createHomePage();
 }
 
 function createElement(tag, nameForClass, elemForInsert) {
@@ -46,6 +47,18 @@ function initialPage() {
   createElement("div", "tooltip", body);
   const tooltip = document.querySelector(".tooltip");
   tooltip.innerText = "Please, enter at least one character";
+}
+
+function createHomePage() {
+  let gamer = JSON.parse(localStorage.getItem("character"));
+
+  createElement("h1", "greeting_text", body);
+  const title = document.querySelector(".greeting_text");
+  title.innerText = `Hi, ${gamer[0].name}!`;
+
+  createElement("button", "button_fight", body);
+  const button = document.querySelector(".button_fight");
+  button.innerText = "Fight!";
 }
 
 const button = document.querySelector(".registration-field__button");
