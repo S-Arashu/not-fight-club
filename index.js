@@ -173,6 +173,62 @@ function createCharacterPage() {
   createElement("button", "button_avatar", info);
   const avatar = document.querySelector(".button_avatar");
   avatar.innerText = "Choose avatar";
+
+  createElement("button", "button_edit", info);
+  const edit = document.querySelector(".button_edit");
+  edit.innerText = "Edit name";
+
+  edit.addEventListener("click", changingName);
+}
+
+function changingName() {
+  createElement("div", "background", body);
+  const background = document.querySelector(".background");
+  createElement("div", "edit-field", background);
+  const edit = document.querySelector(".edit-field");
+
+  createElement("div", "cross", edit);
+  const cross = document.querySelector(".cross");
+  createElement("span", "cross-span", cross);
+  createElement("span", "cross-span", cross);
+
+  cross.addEventListener("click", () => {
+    background.remove();
+  });
+
+  createElement("p", "text-for-edit-field", edit);
+  const loses = document.querySelector(".text-for-edit-field");
+  loses.innerText = "Please, enter new name";
+
+  let gamer = JSON.parse(localStorage.getItem("character"));
+
+  createElement("input", "edit-input", edit);
+  const input = document.querySelector(".edit-input");
+  input.setAttribute("type", "text");
+  // input.setAttribute("id", "registration-field__input");
+  input.setAttribute("name", "name");
+  input.setAttribute("minlength", "1");
+  input.setAttribute("maxlength", "30");
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("value", `${gamer[0].name}`);
+  input.focus();
+
+  createElement("button", "button_save", edit);
+  const save = document.querySelector(".button_save");
+  save.innerText = "Save";
+
+  let newName;
+
+  input.addEventListener("change", (event) => {
+    newName = event.target.value;
+  });
+
+  save.addEventListener("click", () => {
+    gamer[0].name = newName;
+    localStorage.setItem("character", JSON.stringify(gamer));
+    const name = document.querySelector(".character-name");
+    name.innerText = `Name: ${gamer[0].name}`;
+  });
 }
 
 const button = document.querySelector(".registration-field__button");

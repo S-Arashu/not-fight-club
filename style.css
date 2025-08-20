@@ -53,7 +53,9 @@ body {
 .registration-field__button:hover,
 .button_fight:hover,
 .button_character:hover,
-.button_avatar:hover {
+.button_avatar:hover,
+.button_edit:hover,
+.button_save:hover {
   background-color: #d2893c;
 }
 
@@ -115,11 +117,14 @@ body {
   color: #851a07;
 }
 
-.button_avatar {
+.button_avatar,
+.button_edit,
+.button_save {
   padding: 5%;
   border-radius: 40px;
   border: #d2893c 1px solid;
   cursor: pointer;
+  margin: 3%;
 }
 
 .choose-character-img {
@@ -202,4 +207,22 @@ body {
 
 .cross:hover > .cross-span:last-child {
   transform: rotate(90deg);
+}
+
+.edit-field {
+  width: 40%;
+  height: 20vh;
+  background-color: #d1bdbd;
+  position: relative;
+  margin: auto;
+  border-radius: 20px;
+  margin-top: 20%;
+}
+
+.text-for-edit-field {
+  padding: 6%;
+}
+
+.edit-input {
+  margin-left: 6%;
 }
