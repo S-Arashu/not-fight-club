@@ -42,7 +42,8 @@ body {
 
 .registration-field__button,
 .button_fight,
-.button_character {
+.button_character,
+.button_attack {
   padding: 3%;
   border-radius: 50px;
   border: 1px solid #d2893c;
@@ -55,7 +56,11 @@ body {
 .button_character:hover,
 .button_avatar:hover,
 .button_edit:hover,
-.button_save:hover {
+.button_save:hover,
+.button_home:hover,
+.button_home-page:hover,
+.button_character-page:hover,
+.button_attack:hover {
   background-color: #d2893c;
 }
 
@@ -92,9 +97,11 @@ body {
   display: block;
 }
 
-.character-img {
+.character-img,
+.enemy-img {
   max-width: 480px;
-  max-height: 540px;
+  width: 100%;
+  /* max-height: 540px; */
 }
 
 .background {
@@ -119,7 +126,8 @@ body {
 
 .button_avatar,
 .button_edit,
-.button_save {
+.button_save,
+.button_home {
   padding: 5%;
   border-radius: 40px;
   border: #d2893c 1px solid;
@@ -209,7 +217,8 @@ body {
   transform: rotate(90deg);
 }
 
-.edit-field {
+.edit-field,
+.result-field {
   width: 40%;
   height: 20vh;
   background-color: #d1bdbd;
@@ -219,10 +228,132 @@ body {
   margin-top: 20%;
 }
 
+.result-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-info {
+  font-size: 35px;
+}
+
 .text-for-edit-field {
   padding: 6%;
 }
 
 .edit-input {
   margin-left: 6%;
+}
+
+.button_home-page,
+.button_character-page {
+  padding: 1%;
+  margin: 3%;
+  border-radius: 30px;
+  border-bottom: #d2893c 1px solid;
+  cursor: pointer;
+  border: none;
+}
+
+.header::after {
+  content: "";
+  width: 100%;
+  height: 5px;
+  display: block;
+  background-color: #f78205;
+}
+
+.character-name-fight {
+  font-size: 25px;
+  padding-left: 2%;
+}
+
+.health-line {
+  max-width: 480px;
+  width: 100%;
+  height: 20px;
+  border-radius: 30px;
+}
+
+.fight-block {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5%;
+}
+
+.attack-options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 50%;
+  height: 20vh;
+  justify-content: space-evenly;
+}
+
+.attack-zones {
+  width: 100%;
+  position: relative;
+  display: flex;
+  gap: 20%;
+}
+
+.attack-zones::after {
+  content: "";
+  width: 5px;
+  height: 20vh;
+  display: block;
+  top: 22px;
+  right: 147px;
+  background-color: #f78205;
+  position: absolute;
+}
+
+.defense-options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  height: 20vh;
+  justify-content: space-evenly;
+}
+
+.button_attack {
+  padding: 7%;
+  margin-top: 20%;
+  margin-left: 28%;
+  font-size: 25px;
+}
+
+.separator {
+  width: 100%;
+  height: 5px;
+  background-color: #000;
+}
+
+.process-of-fight {
+  width: 90%;
+  height: 20vh;
+  overflow: scroll;
+}
+
+.attack-zone__label,
+.defense-zone__label {
+  cursor: pointer;
+}
+
+.hero {
+  color: rgb(60, 246, 16);
+}
+
+.enemy {
+  color: rgb(246 31 16);
+}
+
+.item {
+  color: #851a07;
+}
+
+.process-of-fight {
+  font-size: 24px;
 }

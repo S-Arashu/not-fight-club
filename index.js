@@ -14,6 +14,17 @@ const characters = [
   "./assets/img/character6.png",
 ];
 
+const zones = ["Head", "Neck", "Body", "Belly", "Legs"];
+const zonesReverse = ["Head", "Neck", "Body", "Belly", "Legs"].reverse();
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 if (!localStorage.getItem("character")) {
   createInitialPage();
 } else {
@@ -24,23 +35,33 @@ function createElement(tag, nameForClass, elemForInsert) {
   const elem = document.createElement(tag);
   elem.classList.add(nameForClass);
   elemForInsert.append(elem);
+  return elem;
 }
 
 function createInitialPage() {
   createElement("div", "registration-field", body);
 
   const registrationField = document.querySelector(".registration-field");
-  createElement("h1", "registration-field__title", registrationField);
-  const title = document.querySelector(".registration-field__title");
+  const title = createElement(
+    "h1",
+    "registration-field__title",
+    registrationField
+  );
   title.innerText = "Create Your Character";
 
-  createElement("label", "registration-field__label", registrationField);
-  const label = document.querySelector(".registration-field__label");
+  const label = createElement(
+    "label",
+    "registration-field__label",
+    registrationField
+  );
   label.setAttribute("for", "registration-field__input");
   label.innerText = "Character Name";
 
-  createElement("input", "registration-field__input-class", registrationField);
-  const input = document.querySelector(".registration-field__input-class");
+  const input = createElement(
+    "input",
+    "registration-field__input-class",
+    registrationField
+  );
   input.setAttribute("type", "text");
   input.setAttribute("id", "registration-field__input");
   input.setAttribute("name", "name");
@@ -50,28 +71,32 @@ function createInitialPage() {
   input.setAttribute("autocomplete", "off");
   input.focus();
 
-  createElement("button", "registration-field__button", registrationField);
-  const button = document.querySelector(".registration-field__button");
+  const button = createElement(
+    "button",
+    "registration-field__button",
+    registrationField
+  );
   button.innerText = "Create Character";
 
-  createElement("div", "tooltip", body);
-  const tooltip = document.querySelector(".tooltip");
+  const tooltip = createElement("div", "tooltip", body);
   tooltip.innerText = "Please, enter at least one character";
 }
 
 function createHomePage() {
   let gamer = JSON.parse(localStorage.getItem("character"));
 
-  createElement("h1", "greeting_text", body);
-  const title = document.querySelector(".greeting_text");
+  const title = createElement("h1", "greeting_text", body);
   title.innerText = `Hi, ${gamer[0].name}!`;
 
-  createElement("button", "button_fight", body);
-  const button = document.querySelector(".button_fight");
+  const button = createElement("button", "button_fight", body);
   button.innerText = "Fight!";
 
-  createElement("button", "button_character", body);
-  const character = document.querySelector(".button_character");
+  button.addEventListener("click", () => {
+    body.innerHTML = "";
+    createFightPage();
+  });
+
+  const character = createElement("button", "button_character", body);
   character.innerText = "Character";
 
   character.addEventListener("click", () => {
@@ -84,13 +109,10 @@ function createHomePage() {
     if (avatar) {
       console.log("Hi again");
       avatar.addEventListener("click", () => {
-        createElement("div", "background", body);
-        const background = document.querySelector(".background");
-        createElement("div", "select-field", background);
-        const select = document.querySelector(".select-field");
+        const background = createElement("div", "background", body);
+        const select = createElement("div", "select-field", background);
 
-        createElement("div", "cross", select);
-        const cross = document.querySelector(".cross");
+        const cross = createElement("div", "cross", select);
         createElement("span", "cross-span", cross);
         createElement("span", "cross-span", cross);
 
@@ -145,50 +167,47 @@ function createHomePage() {
 
 function createCharacterPage() {
   let gamer = JSON.parse(localStorage.getItem("character"));
-  createElement("h1", "character-name", body);
-  const name = document.querySelector(".character-name");
+  const name = createElement("h1", "character-name", body);
   name.innerText = `Name: ${gamer[0].name}`;
 
-  createElement("div", "character-page", body);
-  const page = document.querySelector(".character-page");
+  const page = createElement("div", "character-page", body);
 
-  createElement("img", "character-img", page);
-  const img = document.querySelector(".character-img");
+  const img = createElement("img", "character-img", page);
   img.setAttribute("alt", "Character image 1");
   img.setAttribute("width", "480px");
   img.setAttribute("height", "540px");
   img.setAttribute("src", `${characters[gamer[0].usingAvatar - 1]}`);
 
-  createElement("div", "info-character", page);
-  const info = document.querySelector(".info-character");
+  const info = createElement("div", "info-character", page);
 
-  createElement("p", "count-of-wins", info);
-  const wins = document.querySelector(".count-of-wins");
+  const wins = createElement("p", "count-of-wins", info);
   wins.innerText = `Wins: ${winsCount}`;
 
-  createElement("p", "count-of-loses", info);
-  const loses = document.querySelector(".count-of-loses");
+  const loses = createElement("p", "count-of-loses", info);
   loses.innerText = `Loses: ${losesCount}`;
 
-  createElement("button", "button_avatar", info);
-  const avatar = document.querySelector(".button_avatar");
+  const avatar = createElement("button", "button_avatar", info);
   avatar.innerText = "Choose avatar";
 
-  createElement("button", "button_edit", info);
-  const edit = document.querySelector(".button_edit");
+  const edit = createElement("button", "button_edit", info);
   edit.innerText = "Edit name";
+
+  const home = createElement("button", "button_home", info);
+  home.innerText = "Home page";
+
+  home.addEventListener("click", () => {
+    body.innerHTML = "";
+    createHomePage();
+  });
 
   edit.addEventListener("click", changingName);
 }
 
 function changingName() {
-  createElement("div", "background", body);
-  const background = document.querySelector(".background");
-  createElement("div", "edit-field", background);
-  const edit = document.querySelector(".edit-field");
+  const background = createElement("div", "background", body);
+  const edit = createElement("div", "edit-field", background);
 
-  createElement("div", "cross", edit);
-  const cross = document.querySelector(".cross");
+  const cross = createElement("div", "cross", edit);
   createElement("span", "cross-span", cross);
   createElement("span", "cross-span", cross);
 
@@ -196,16 +215,13 @@ function changingName() {
     background.remove();
   });
 
-  createElement("p", "text-for-edit-field", edit);
-  const loses = document.querySelector(".text-for-edit-field");
-  loses.innerText = "Please, enter new name";
+  const editField = createElement("p", "text-for-edit-field", edit);
+  editField.innerText = "Please, enter new name";
 
   let gamer = JSON.parse(localStorage.getItem("character"));
 
-  createElement("input", "edit-input", edit);
-  const input = document.querySelector(".edit-input");
+  const input = createElement("input", "edit-input", edit);
   input.setAttribute("type", "text");
-  // input.setAttribute("id", "registration-field__input");
   input.setAttribute("name", "name");
   input.setAttribute("minlength", "1");
   input.setAttribute("maxlength", "30");
@@ -213,8 +229,7 @@ function changingName() {
   input.setAttribute("value", `${gamer[0].name}`);
   input.focus();
 
-  createElement("button", "button_save", edit);
-  const save = document.querySelector(".button_save");
+  const save = createElement("button", "button_save", edit);
   save.innerText = "Save";
 
   let newName;
@@ -229,6 +244,361 @@ function changingName() {
     const name = document.querySelector(".character-name");
     name.innerText = `Name: ${gamer[0].name}`;
   });
+}
+
+function createFightPage() {
+  let gamer = JSON.parse(localStorage.getItem("character"));
+  const enemies = gamer[1];
+
+  let attackChecked;
+  let defenseChecked;
+  let attackItemsChecked;
+  let defenseItemsChecked = [];
+  let num = gamer[0].num;
+  let characterHealthLeft = gamer[0].characterHealthLeft;
+  let enemyHealthLeft = enemies.enemyArr[num].enemyHealthLeft;
+
+  const header = createElement("div", "header", body);
+
+  const home = createElement("button", "button_home-page", header);
+  home.innerText = "Home page";
+
+  home.addEventListener("click", () => {
+    body.innerHTML = "";
+    createHomePage();
+  });
+
+  const character = createElement("button", "button_character-page", header);
+  character.innerText = "Character page";
+
+  character.addEventListener("click", () => {
+    body.innerHTML = "";
+    createCharacterPage();
+  });
+
+  const fight = createElement("div", "fight-block", body);
+
+  const characterBlock = createElement("div", "character-block", fight);
+
+  const characterName = createElement(
+    "p",
+    "character-name-fight",
+    characterBlock
+  );
+  characterName.innerText = `${gamer[0].name}`;
+
+  const img = createElement("img", "character-img", characterBlock);
+  img.setAttribute("alt", `Character image ${gamer[0].usingAvatar - 1}`);
+  img.setAttribute("width", "180px");
+  img.setAttribute("height", "240px");
+  img.setAttribute("src", `${characters[gamer[0].usingAvatar - 1]}`);
+
+  const characterHealthCount = createElement(
+    "p",
+    "character-health-count",
+    characterBlock
+  );
+  characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
+
+  const health = createElement("progress", "health-line", characterBlock);
+  health.setAttribute("max", "200");
+  health.setAttribute("value", `${characterHealthLeft}`);
+
+  let characterHealth = gamer[0].health;
+  health.style.border = "1px solid #000";
+  health.style.backgroundColor = `rgb(60, 246, 16)`;
+
+  const attack = createElement("div", "attack-block", fight);
+
+  const text = createElement("p", "text-for-attack-block", attack);
+  text.innerText = "Please pick 1 Attack zone and 2 Defense zones";
+
+  const attackZones = createElement("div", "attack-zones", attack);
+
+  const attackButton = createElement("button", "button_attack", attack);
+  attackButton.innerText = "Attack!";
+
+  const attackOptions = createElement("div", "attack-options", attackZones);
+
+  const attackZonesTitle = createElement(
+    "p",
+    "text-for-attack-zones",
+    attackOptions
+  );
+  attackZonesTitle.innerText = "Attack Zones";
+
+  for (let i = 0; i < zones.length; i += 1) {
+    const label = createElement("label", "attack-zone__label", attackOptions);
+    label.setAttribute("for", `attack-input-${i + 1}`);
+    label.innerText = `${zones[i]}`;
+
+    const attackItems = createElement("input", "attack-input", label);
+    attackItems.setAttribute("type", "radio");
+    attackItems.setAttribute("id", `attack-input-${i + 1}`);
+    attackItems.setAttribute("name", "attack-zone");
+    attackItems.setAttribute("autocomplete", "off");
+  }
+
+  const defenseOptions = createElement("div", "defense-options", attackZones);
+
+  const defenseZonesTitle = createElement(
+    "p",
+    "text-for-defense-zones",
+    defenseOptions
+  );
+  defenseZonesTitle.innerText = "Defense Zones";
+
+  for (let i = 0; i < zones.length; i += 1) {
+    const label = createElement("label", "defense-zone__label", defenseOptions);
+    label.setAttribute("for", `defense-input-${i + 1}`);
+    label.innerText = `${zones[i]}`;
+
+    const defenseItems = createElement("input", "defense-input", label);
+    defenseItems.setAttribute("type", "checkbox");
+    defenseItems.setAttribute("id", `defense-input-${i + 1}`);
+  }
+
+  const characterEnemyBlock = createElement("div", "character-block", fight);
+
+  const characterEnemyName = createElement(
+    "p",
+    "character-name-fight",
+    characterEnemyBlock
+  );
+  characterEnemyName.innerText = `${enemies.enemyArr[num].name}`;
+
+  const imgEnemy = createElement("img", "enemy-img", characterEnemyBlock);
+  imgEnemy.setAttribute("alt", `Character image ${num}`);
+  imgEnemy.setAttribute("width", "180px");
+  imgEnemy.setAttribute("height", "240px");
+  imgEnemy.setAttribute("src", `${enemies.enemyArr[num].img}`);
+
+  console.log(num);
+
+  const characterEnemyHealth = createElement(
+    "p",
+    "character-enemy-health",
+    characterEnemyBlock
+  );
+  characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
+
+  const healthEnemy = createElement(
+    "progress",
+    "health-line",
+    characterEnemyBlock
+  );
+
+  let enemyHealth = enemies.enemyArr[num].health;
+  healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
+  healthEnemy.setAttribute("max", `${enemyHealth}`);
+  healthEnemy.setAttribute("value", `${enemyHealthLeft}`);
+  const separator = createElement("div", "separator", body);
+
+  const process = createElement("div", "process-of-fight", body);
+
+  attackButton.addEventListener("click", () => {
+    checkInputs();
+  });
+
+  function checkInputs() {
+    attackChecked = 0;
+    defenseChecked = 0;
+
+    const attackElements = document.querySelectorAll(".attack-input");
+
+    attackElements.forEach((el) => {
+      if (el.checked) {
+        attackChecked += 1;
+      }
+    });
+
+    const defenseElements = document.querySelectorAll(".defense-input");
+
+    defenseElements.forEach((el) => {
+      if (el.checked) {
+        defenseChecked += 1;
+      }
+    });
+
+    console.log(attackChecked, defenseChecked);
+
+    if (attackChecked !== 1 || defenseChecked !== 2) {
+      attackButton.style.boxShadow =
+        "0px -1px 11px 23px rgba(255, 255, 255, 0.2), 0px -1px 11px 17px rgba(255, 67, 0, 0.2)";
+      setTimeout(() => {
+        attackButton.style.boxShadow = "none";
+      }, 1000);
+    } else {
+      let fightArr = [];
+      let defenseArr = [];
+      fightArr = shuffle(zones);
+      defenseArr = shuffle(zonesReverse);
+      createFight(fightArr, defenseArr);
+    }
+  }
+
+  function createFight(fightArr, defenseArr) {
+    attackItemsChecked = "";
+    defenseItemsChecked = [];
+
+    let fightZones = fightArr.slice(0, enemies.enemyArr[num].attack.length);
+    let defenseZones = defenseArr.slice(
+      0,
+      enemies.enemyArr[num].defense.length
+    );
+    console.log(fightZones, defenseZones);
+
+    const characterCurrentName = `${gamer[0].name}`;
+    const enemyCurrentName = `${enemies.enemyArr[num].name}`;
+
+    const attackElements = document.querySelectorAll(".attack-input");
+
+    attackElements.forEach((el) => {
+      if (el.checked) {
+        attackItemsChecked = el.labels[0].innerText;
+      }
+    });
+
+    const defenseElements = document.querySelectorAll(".defense-input");
+
+    defenseElements.forEach((el) => {
+      if (el.checked) {
+        defenseItemsChecked.push(el.labels[0].innerText);
+      }
+    });
+
+    const currentEnemy = document.querySelector(".enemy-img").alt.at(-1);
+
+    // console.log(enemies.enemyArr[num].defense);
+
+    if (defenseZones.includes(attackItemsChecked)) {
+      process.innerHTML += `
+      <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> but <span class='enemy'>${enemyCurrentName}</span> was able to protect his <span class='item'>${attackItemsChecked}</span>.<br>
+      `;
+    } else if (num === enemies.enemyArr[num].defense.length) {
+      process.innerHTML += `
+      <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> and crit <span class='item'>${gamer[0].criticalDamage}</span> damage.<br>
+      `;
+      enemyHealthLeft -= gamer[0].criticalDamage;
+      console.log(enemyHealthLeft);
+      enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+      localStorage.setItem("character", JSON.stringify(gamer));
+      healthEnemy.value = enemyHealthLeft;
+      characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
+      healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
+    } else {
+      process.innerHTML += `
+      <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> and deal <span class='item'>${gamer[0].damage}</span> damage.<br>
+      `;
+      enemyHealthLeft -= gamer[0].damage;
+      console.log(enemyHealthLeft);
+      enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+      localStorage.setItem("character", JSON.stringify(gamer));
+      healthEnemy.value = enemyHealthLeft;
+      characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
+      healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
+    }
+
+    let array1 = fightZones;
+    let array2 = defenseItemsChecked;
+
+    // if (defenseElements.length > fightZones.length) {
+    //   array1 = defenseItemsChecked;
+    //   array2 = fightZones;
+    // } else {
+    //   array1 = fightZones;
+    //   array2 = defenseItemsChecked;
+    // }
+
+    console.log(array1, array2);
+
+    for (let i = 0; i < array1.length; i += 1) {
+      for (let j = 0; j < array2.length; j += 1) {
+        if (array1[i] === "Head") {
+          process.innerHTML += `
+      <span class='enemy'>${enemyCurrentName}</span> attacked <span class='hero'>${characterCurrentName}</span> to <span class='item'>${array1[i]}</span> and crit <span class='item'>${enemies.enemyArr[num].criticalDamage}</span> damage.<br>
+      `;
+          characterHealthLeft -= enemies.enemyArr[num].criticalDamage;
+          gamer[0].characterHealthLeft = characterHealthLeft;
+          localStorage.setItem("character", JSON.stringify(gamer));
+          characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
+          health.value = characterHealthLeft;
+          if (characterHealthLeft <= 30) {
+            health.style.backgroundColor = `rgb(246 31 16)`;
+          } else {
+            health.style.backgroundColor = `rgb(60, 246, 16)`;
+          }
+
+          break;
+        } else if (array1[i] === array2[j]) {
+          process.innerHTML += `
+      <span class='enemy'>${enemyCurrentName}</span> attacked <span class='hero'>${characterCurrentName}</span> to <span class='item'>${array1[i]}</span> but <span class='enemy'>${characterCurrentName}</span> was able to protect his <span class='item'>${array1[i]}</span>.<br>
+      `;
+          break;
+        } else {
+          process.innerHTML += `
+      <span class='enemy'>${enemyCurrentName}</span> attacked <span class='hero'>${characterCurrentName}</span> to <span class='item'>${array1[i]}</span> and deal <span class='item'>${enemies.enemyArr[num].damage}</span> damage.<br>
+      `;
+          characterHealthLeft -= enemies.enemyArr[num].damage;
+          gamer[0].enemyHealthLeft = characterHealthLeft;
+          localStorage.setItem("character", JSON.stringify(gamer));
+          health.value = characterHealthLeft;
+          characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
+          if (characterHealthLeft <= 30) {
+            health.style.backgroundColor = `rgb(246 31 16)`;
+          } else {
+            health.style.backgroundColor = `rgb(60, 246, 16)`;
+          }
+
+          break;
+        }
+      }
+    }
+
+    if (characterHealthLeft <= 0) {
+      const background = createElement("div", "background", body);
+      const result = createElement("div", "result-field", background);
+      const resultInfo = createElement("p", "result-info", result);
+      resultInfo.innerText = `${enemies.enemyArr[num].name} wins!`;
+
+      const cross = createElement("div", "cross", result);
+      createElement("span", "cross-span", cross);
+      createElement("span", "cross-span", cross);
+
+      cross.addEventListener("click", () => {
+        characterHealthLeft = gamer[0].health;
+        num = Math.floor(Math.random() * 7);
+        gamer[0].num = num;
+        gamer[0].characterHealthLeft = characterHealthLeft;
+        localStorage.setItem("character", JSON.stringify(gamer));
+
+        body.innerHTML = "";
+        createHomePage();
+      });
+    }
+
+    if (enemyHealthLeft <= 0) {
+      const background = createElement("div", "background", body);
+      const result = createElement("div", "result-field", background);
+      const resultInfo = createElement("p", "result-info", result);
+      resultInfo.innerText = `${gamer[0].name} wins!`;
+
+      const cross = createElement("div", "cross", result);
+      createElement("span", "cross-span", cross);
+      createElement("span", "cross-span", cross);
+
+      cross.addEventListener("click", () => {
+        enemyHealthLeft = enemies.enemyArr[num].health;
+        num = Math.floor(Math.random() * 7);
+        gamer[0].num = num;
+        enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+        localStorage.setItem("character", JSON.stringify(gamer));
+
+        body.innerHTML = "";
+        createHomePage();
+      });
+    }
+  }
 }
 
 const button = document.querySelector(".registration-field__button");
@@ -254,6 +624,85 @@ if (button) {
           {
             name: input.value,
             usingAvatar: 1,
+            health: 200,
+            characterHealthLeft: 200,
+            damage: 10,
+            criticalDamage: 15,
+            num: Math.floor(Math.random() * 7),
+          },
+          {
+            enemyArr: [
+              {
+                name: "Moldora",
+                img: "./assets/img/enemy1.png",
+                health: 150,
+                enemyHealthLeft: 150,
+                attack: ["Body"],
+                defense: ["Body", "Legs", "Head"],
+                damage: 15,
+                criticalDamage: 20,
+              },
+              {
+                name: "Meteo Wizzrobe",
+                img: "./assets/img/enemy2.webp",
+                health: 60,
+                enemyHealthLeft: 60,
+                attack: ["Head", "Neck"],
+                defense: ["Legs"],
+                damage: 10,
+                criticalDamage: 15,
+              },
+              {
+                name: "Fire-Breath Lizalfos",
+                img: "./assets/img/enemy3.png",
+                health: 40,
+                enemyHealthLeft: 40,
+                attack: ["Legs", "Body"],
+                defense: ["Body"],
+                damage: 5,
+                criticalDamage: 10,
+              },
+              {
+                name: "Guardian Stalker",
+                img: "./assets/img/enemy4.png",
+                health: 150,
+                enemyHealthLeft: 150,
+                attack: ["Head", "Neck", "Body"],
+                defense: ["Body", "Neck"],
+                damage: 15,
+                criticalDamage: 20,
+              },
+              {
+                name: "Monk Maz Koshia",
+                img: "./assets/img/enemy5.jpg",
+                health: 200,
+                enemyHealthLeft: 200,
+                attack: ["Body", "Belly", "Legs"],
+                defense: ["Neck", "Body", "Belly"],
+                damage: 25,
+                criticalDamage: 30,
+              },
+              {
+                name: "Waterblight Ganon",
+                img: "./assets/img/enemy6.jpg",
+                health: 200,
+                enemyHealthLeft: 200,
+                attack: ["Body", "Legs"],
+                defense: ["Neck", "Belly"],
+                damage: 20,
+                criticalDamage: 25,
+              },
+              {
+                name: "Calamity Ganon",
+                img: "./assets/img/enemy7.jpg",
+                health: 300,
+                enemyHealthLeft: 300,
+                attack: ["Head", "Body", "Legs"],
+                defense: ["Head", "Body", "Neck", "Belly"],
+                damage: 30,
+                criticalDamage: 35,
+              },
+            ],
           },
         ])
       );
