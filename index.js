@@ -16,6 +16,7 @@ const characters = [
 
 const zones = ["Head", "Neck", "Body", "Belly", "Legs"];
 const zonesReverse = ["Head", "Neck", "Body", "Belly", "Legs"].reverse();
+const zonesBuildPage = [...zones];
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -327,10 +328,10 @@ function createFightPage() {
   );
   attackZonesTitle.innerText = "Attack Zones";
 
-  for (let i = 0; i < zones.length; i += 1) {
+  for (let i = 0; i < zonesBuildPage.length; i += 1) {
     const label = createElement("label", "attack-zone__label", attackOptions);
     label.setAttribute("for", `attack-input-${i + 1}`);
-    label.innerText = `${zones[i]}`;
+    label.innerText = `${zonesBuildPage[i]}`;
 
     const attackItems = createElement("input", "attack-input", label);
     attackItems.setAttribute("type", "radio");
@@ -348,10 +349,10 @@ function createFightPage() {
   );
   defenseZonesTitle.innerText = "Defense Zones";
 
-  for (let i = 0; i < zones.length; i += 1) {
+  for (let i = 0; i < zonesBuildPage.length; i += 1) {
     const label = createElement("label", "defense-zone__label", defenseOptions);
     label.setAttribute("for", `defense-input-${i + 1}`);
-    label.innerText = `${zones[i]}`;
+    label.innerText = `${zonesBuildPage[i]}`;
 
     const defenseItems = createElement("input", "defense-input", label);
     defenseItems.setAttribute("type", "checkbox");
@@ -395,6 +396,58 @@ function createFightPage() {
   const separator = createElement("div", "separator", body);
 
   const process = createElement("div", "process-of-fight", body);
+  process.innerHTML = gamer[0].process;
+
+  const attackElements = document.querySelectorAll(".attack-input");
+  const defenseElements = document.querySelectorAll(".defense-input");
+
+  attackZones.addEventListener("click", (event) => {
+    let defenseItemsChosen = [];
+    if (event.target.tagName === "INPUT") {
+      attackElements.forEach((el) => {
+        if (el.checked) {
+          gamer[0].attackItem = el.id.at(-1);
+          attackChecked += 1;
+        }
+      });
+
+      defenseElements.forEach((el) => {
+        if (el.checked) {
+          console.log(el.id);
+          defenseItemsChosen.push(el.id.at(-1));
+          defenseChecked += 1;
+        }
+
+        gamer[0].defenseItem = defenseItemsChosen;
+      });
+    }
+    localStorage.setItem("character", JSON.stringify(gamer));
+  });
+
+  if (+gamer[0].attackItem !== 0) {
+    attackElements[+gamer[0].attackItem - 1].checked = true;
+  }
+
+  if (gamer[0].defenseItem.length !== 0) {
+    for (let i = 0; i < gamer[0].defenseItem.length; i += 1) {
+      for (let j = 0; j <= defenseElements.length; j += 1) {
+        if (+gamer[0].defenseItem[i] === j) {
+          console.log(defenseElements[j - 1]);
+          defenseElements[j - 1].checked = true;
+        }
+      }
+    }
+  }
+
+  // if (gamer[0].defenseItem.length !== 0) {
+  //   for (let i = 0; i < defenseElements.length; i += 1) {
+  //     for (let j = 0; j < gamer[0].defenseItem.length; j += 1) {
+  //       if (i === +gamer[0].defenseItem[j] - 1) {
+  //         defenseElements[i].checked = true;
+  //       }
+  //     }
+  //   }
+  // }
 
   attackButton.addEventListener("click", () => {
     checkInputs();
@@ -403,21 +456,23 @@ function createFightPage() {
   function checkInputs() {
     attackChecked = 0;
     defenseChecked = 0;
-
-    const attackElements = document.querySelectorAll(".attack-input");
+    // let defenseItemsChosen = [];
 
     attackElements.forEach((el) => {
       if (el.checked) {
+        // gamer[0].attackItem = el.id.at(-1);
         attackChecked += 1;
       }
     });
 
-    const defenseElements = document.querySelectorAll(".defense-input");
-
     defenseElements.forEach((el) => {
       if (el.checked) {
+        console.log(el.id);
+        // defenseItemsChosen.push(el.id.at(-1));
         defenseChecked += 1;
       }
+
+      // gamer[0].defenseItem = defenseItemsChosen;
     });
 
     console.log(attackChecked, defenseChecked);
@@ -475,6 +530,8 @@ function createFightPage() {
       process.innerHTML += `
       <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> but <span class='enemy'>${enemyCurrentName}</span> was able to protect his <span class='item'>${attackItemsChecked}</span>.<br>
       `;
+      gamer[0].process = process.innerHTML;
+      localStorage.setItem("character", JSON.stringify(gamer));
     } else if (num === enemies.enemyArr[num].defense.length) {
       process.innerHTML += `
       <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> and crit <span class='item'>${gamer[0].criticalDamage}</span> damage.<br>
@@ -482,6 +539,7 @@ function createFightPage() {
       enemyHealthLeft -= gamer[0].criticalDamage;
       console.log(enemyHealthLeft);
       enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+      gamer[0].process = process.innerHTML;
       localStorage.setItem("character", JSON.stringify(gamer));
       healthEnemy.value = enemyHealthLeft;
       characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
@@ -493,6 +551,7 @@ function createFightPage() {
       enemyHealthLeft -= gamer[0].damage;
       console.log(enemyHealthLeft);
       enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+      gamer[0].process = process.innerHTML;
       localStorage.setItem("character", JSON.stringify(gamer));
       healthEnemy.value = enemyHealthLeft;
       characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
@@ -520,6 +579,7 @@ function createFightPage() {
       `;
           characterHealthLeft -= enemies.enemyArr[num].criticalDamage;
           gamer[0].characterHealthLeft = characterHealthLeft;
+          gamer[0].process = process.innerHTML;
           localStorage.setItem("character", JSON.stringify(gamer));
           characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
           health.value = characterHealthLeft;
@@ -534,6 +594,8 @@ function createFightPage() {
           process.innerHTML += `
       <span class='enemy'>${enemyCurrentName}</span> attacked <span class='hero'>${characterCurrentName}</span> to <span class='item'>${array1[i]}</span> but <span class='enemy'>${characterCurrentName}</span> was able to protect his <span class='item'>${array1[i]}</span>.<br>
       `;
+          gamer[0].process = process.innerHTML;
+          localStorage.setItem("character", JSON.stringify(gamer));
           break;
         } else {
           process.innerHTML += `
@@ -541,6 +603,7 @@ function createFightPage() {
       `;
           characterHealthLeft -= enemies.enemyArr[num].damage;
           gamer[0].enemyHealthLeft = characterHealthLeft;
+          gamer[0].process = process.innerHTML;
           localStorage.setItem("character", JSON.stringify(gamer));
           health.value = characterHealthLeft;
           characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
@@ -570,6 +633,9 @@ function createFightPage() {
         num = Math.floor(Math.random() * 7);
         gamer[0].num = num;
         gamer[0].characterHealthLeft = characterHealthLeft;
+        gamer[0].process = "";
+        gamer[0].attackItem = 0;
+        gamer[0].defenseItem = [];
         localStorage.setItem("character", JSON.stringify(gamer));
 
         body.innerHTML = "";
@@ -591,6 +657,9 @@ function createFightPage() {
         enemyHealthLeft = enemies.enemyArr[num].health;
         num = Math.floor(Math.random() * 7);
         gamer[0].num = num;
+        gamer[0].process = "";
+        gamer[0].attackItem = 0;
+        gamer[0].defenseItem = [];
         enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
         localStorage.setItem("character", JSON.stringify(gamer));
 
@@ -629,6 +698,9 @@ if (button) {
             damage: 10,
             criticalDamage: 15,
             num: Math.floor(Math.random() * 7),
+            process: "",
+            attackItem: 0,
+            defenseItem: [],
           },
           {
             enemyArr: [
