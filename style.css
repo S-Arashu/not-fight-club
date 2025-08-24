@@ -269,11 +269,22 @@ body {
   padding-left: 2%;
 }
 
-.health-line {
+.health-line,
+.low-health,
+.normal-health {
   max-width: 480px;
   width: 100%;
   height: 20px;
   border-radius: 30px;
+}
+
+.low-health::-webkit-progress-value {
+  background-color: rgb(246, 31, 16);
+}
+
+.health-line::-webkit-progress-value,
+.normal-health::-webkit-progress-value {
+  background-color: rgb(60, 246, 16);
 }
 
 .fight-block {
@@ -301,12 +312,17 @@ body {
 .attack-zones::after {
   content: "";
   width: 5px;
-  height: 20vh;
+  height: 100%;
   display: block;
-  top: 22px;
+  top: 15px;
   right: 147px;
   background-color: #f78205;
   position: absolute;
+}
+
+.attack-input,
+.defense-input {
+  margin-left: 18%;
 }
 
 .defense-options {
@@ -314,7 +330,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 50%;
-  height: 20vh;
+  height: 100%;
   justify-content: space-evenly;
 }
 
@@ -335,11 +351,24 @@ body {
   width: 90%;
   height: 20vh;
   overflow: scroll;
+  margin: auto;
+  border: 3px solid #ff9800;
+  padding: 2%;
+  border-top: none;
 }
 
 .attack-zone__label,
 .defense-zone__label {
   cursor: pointer;
+  padding: 4%;
+  margin: 0 0 8% 0;
+  width: 100%;
+  height: auto;
+  text-align: end;
+}
+
+.defense-zone__label {
+  text-align: start;
 }
 
 .hero {

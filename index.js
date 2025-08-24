@@ -83,6 +83,70 @@ function createInitialPage() {
   tooltip.innerText = "Please, enter at least one character";
 }
 
+function createAvatarsPage() {
+  let gamer = JSON.parse(localStorage.getItem("character"));
+  console.log("hi");
+  body.innerHTML = "";
+  createCharacterPage();
+  const avatar = document.querySelector(".button_avatar");
+
+  if (avatar) {
+    console.log("Hi again");
+    avatar.addEventListener("click", () => {
+      const background = createElement("div", "background", body);
+      const select = createElement("div", "select-field", background);
+
+      const cross = createElement("div", "cross", select);
+      createElement("span", "cross-span", cross);
+      createElement("span", "cross-span", cross);
+
+      for (let i = 0; i < characters.length; i++) {
+        const label = document.createElement("label");
+        select.append(label);
+        const input = document.createElement("input");
+        input.classList.add("input-for-img");
+        input.setAttribute("type", "radio");
+        input.setAttribute("name", "image");
+        input.setAttribute("value", `${characters[i]}`);
+        label.append(input);
+
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("wrapper-for-img");
+        label.append(wrapper);
+
+        const img = document.createElement("img");
+        img.classList.add("choose-character-img");
+        img.setAttribute("alt", `Character image ${i + 1}`);
+        img.setAttribute("width", "180px");
+        img.setAttribute("height", "240px");
+        img.setAttribute("src", `${characters[i]}`);
+        wrapper.append(img);
+        img.addEventListener("click", () => {
+          gamer[0].usingAvatar = +img.alt.at(-1);
+          localStorage.setItem("character", JSON.stringify(gamer));
+        });
+
+        if (gamer[0].usingAvatar === i + 1) {
+          input.setAttribute("checked", "");
+        }
+
+        cross.addEventListener("click", () => {
+          background.remove();
+        });
+      }
+
+      const images = document.getElementsByName("image");
+
+      images.forEach((image) => {
+        image.addEventListener("change", function () {
+          const selectedImage = document.querySelector(".character-img");
+          selectedImage.src = this.value;
+        });
+      });
+    });
+  }
+}
+
 function createHomePage() {
   let gamer = JSON.parse(localStorage.getItem("character"));
 
@@ -100,70 +164,7 @@ function createHomePage() {
   const character = createElement("button", "button_character", body);
   character.innerText = "Character";
 
-  character.addEventListener("click", () => {
-    let gamer = JSON.parse(localStorage.getItem("character"));
-    console.log("hi");
-    body.innerHTML = "";
-    createCharacterPage();
-    const avatar = document.querySelector(".button_avatar");
-
-    if (avatar) {
-      console.log("Hi again");
-      avatar.addEventListener("click", () => {
-        const background = createElement("div", "background", body);
-        const select = createElement("div", "select-field", background);
-
-        const cross = createElement("div", "cross", select);
-        createElement("span", "cross-span", cross);
-        createElement("span", "cross-span", cross);
-
-        for (let i = 0; i < characters.length; i++) {
-          const label = document.createElement("label");
-          select.append(label);
-          const input = document.createElement("input");
-          input.classList.add("input-for-img");
-          input.setAttribute("type", "radio");
-          input.setAttribute("name", "image");
-          input.setAttribute("value", `${characters[i]}`);
-          label.append(input);
-
-          const wrapper = document.createElement("div");
-          wrapper.classList.add("wrapper-for-img");
-          label.append(wrapper);
-
-          const img = document.createElement("img");
-          img.classList.add("choose-character-img");
-          img.setAttribute("alt", `Character image ${i + 1}`);
-          img.setAttribute("width", "180px");
-          img.setAttribute("height", "240px");
-          img.setAttribute("src", `${characters[i]}`);
-          wrapper.append(img);
-          img.addEventListener("click", () => {
-            gamer[0].usingAvatar = +img.alt.at(-1);
-            localStorage.setItem("character", JSON.stringify(gamer));
-          });
-
-          if (gamer[0].usingAvatar === i + 1) {
-            input.setAttribute("checked", "");
-          }
-
-          cross.addEventListener("click", () => {
-            background.remove();
-          });
-        }
-
-        const images = document.getElementsByName("image");
-        // const selectedImage = document.querySelector(".selected-image");
-
-        images.forEach((image) => {
-          image.addEventListener("change", function () {
-            const selectedImage = document.querySelector(".character-img");
-            selectedImage.src = this.value;
-          });
-        });
-      });
-    }
-  });
+  character.addEventListener("click", createAvatarsPage);
 }
 
 function createCharacterPage() {
@@ -274,7 +275,7 @@ function createFightPage() {
 
   character.addEventListener("click", () => {
     body.innerHTML = "";
-    createCharacterPage();
+    createAvatarsPage();
   });
 
   const fight = createElement("div", "fight-block", body);
@@ -305,9 +306,7 @@ function createFightPage() {
   health.setAttribute("max", "200");
   health.setAttribute("value", `${characterHealthLeft}`);
 
-  let characterHealth = gamer[0].health;
   health.style.border = "1px solid #000";
-  health.style.backgroundColor = `rgb(60, 246, 16)`;
 
   const attack = createElement("div", "attack-block", fight);
 
@@ -374,8 +373,6 @@ function createFightPage() {
   imgEnemy.setAttribute("height", "240px");
   imgEnemy.setAttribute("src", `${enemies.enemyArr[num].img}`);
 
-  console.log(num);
-
   const characterEnemyHealth = createElement(
     "p",
     "character-enemy-health",
@@ -390,7 +387,6 @@ function createFightPage() {
   );
 
   let enemyHealth = enemies.enemyArr[num].health;
-  healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
   healthEnemy.setAttribute("max", `${enemyHealth}`);
   healthEnemy.setAttribute("value", `${enemyHealthLeft}`);
   const separator = createElement("div", "separator", body);
@@ -439,16 +435,6 @@ function createFightPage() {
     }
   }
 
-  // if (gamer[0].defenseItem.length !== 0) {
-  //   for (let i = 0; i < defenseElements.length; i += 1) {
-  //     for (let j = 0; j < gamer[0].defenseItem.length; j += 1) {
-  //       if (i === +gamer[0].defenseItem[j] - 1) {
-  //         defenseElements[i].checked = true;
-  //       }
-  //     }
-  //   }
-  // }
-
   attackButton.addEventListener("click", () => {
     checkInputs();
   });
@@ -456,23 +442,17 @@ function createFightPage() {
   function checkInputs() {
     attackChecked = 0;
     defenseChecked = 0;
-    // let defenseItemsChosen = [];
 
     attackElements.forEach((el) => {
       if (el.checked) {
-        // gamer[0].attackItem = el.id.at(-1);
         attackChecked += 1;
       }
     });
 
     defenseElements.forEach((el) => {
       if (el.checked) {
-        console.log(el.id);
-        // defenseItemsChosen.push(el.id.at(-1));
         defenseChecked += 1;
       }
-
-      // gamer[0].defenseItem = defenseItemsChosen;
     });
 
     console.log(attackChecked, defenseChecked);
@@ -501,7 +481,6 @@ function createFightPage() {
       0,
       enemies.enemyArr[num].defense.length
     );
-    console.log(fightZones, defenseZones);
 
     const characterCurrentName = `${gamer[0].name}`;
     const enemyCurrentName = `${enemies.enemyArr[num].name}`;
@@ -522,10 +501,6 @@ function createFightPage() {
       }
     });
 
-    const currentEnemy = document.querySelector(".enemy-img").alt.at(-1);
-
-    // console.log(enemies.enemyArr[num].defense);
-
     if (defenseZones.includes(attackItemsChecked)) {
       process.innerHTML += `
       <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> but <span class='enemy'>${enemyCurrentName}</span> was able to protect his <span class='item'>${attackItemsChecked}</span>.<br>
@@ -537,39 +512,39 @@ function createFightPage() {
       <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> and crit <span class='item'>${gamer[0].criticalDamage}</span> damage.<br>
       `;
       enemyHealthLeft -= gamer[0].criticalDamage;
-      console.log(enemyHealthLeft);
       enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
       gamer[0].process = process.innerHTML;
+
+      if (enemyHealthLeft <= 30) {
+        healthEnemy.className = "low-health";
+      } else {
+        healthEnemy.className = "normal-health";
+      }
+
       localStorage.setItem("character", JSON.stringify(gamer));
       healthEnemy.value = enemyHealthLeft;
       characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
-      healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
     } else {
       process.innerHTML += `
       <span class='hero'>${characterCurrentName}</span> attacked <span class='enemy'>${enemyCurrentName}</span> to <span class='item'>${attackItemsChecked}</span> and deal <span class='item'>${gamer[0].damage}</span> damage.<br>
       `;
       enemyHealthLeft -= gamer[0].damage;
-      console.log(enemyHealthLeft);
       enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
       gamer[0].process = process.innerHTML;
+
+      if (enemyHealthLeft <= 30) {
+        healthEnemy.className = "low-health";
+      } else {
+        healthEnemy.className = "normal-health";
+      }
+
       localStorage.setItem("character", JSON.stringify(gamer));
       healthEnemy.value = enemyHealthLeft;
       characterEnemyHealth.innerText = `${enemyHealthLeft} / ${enemies.enemyArr[num].health}`;
-      healthEnemy.style.backgroundColor = `rgb(60, 246, 16))`;
     }
 
     let array1 = fightZones;
     let array2 = defenseItemsChecked;
-
-    // if (defenseElements.length > fightZones.length) {
-    //   array1 = defenseItemsChecked;
-    //   array2 = fightZones;
-    // } else {
-    //   array1 = fightZones;
-    //   array2 = defenseItemsChecked;
-    // }
-
-    console.log(array1, array2);
 
     for (let i = 0; i < array1.length; i += 1) {
       for (let j = 0; j < array2.length; j += 1) {
@@ -584,9 +559,9 @@ function createFightPage() {
           characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
           health.value = characterHealthLeft;
           if (characterHealthLeft <= 30) {
-            health.style.backgroundColor = `rgb(246 31 16)`;
+            health.className = "low-health";
           } else {
-            health.style.backgroundColor = `rgb(60, 246, 16)`;
+            health.className = "normal-health";
           }
 
           break;
@@ -608,9 +583,9 @@ function createFightPage() {
           health.value = characterHealthLeft;
           characterHealthCount.innerText = `${characterHealthLeft} / ${gamer[0].health}`;
           if (characterHealthLeft <= 30) {
-            health.style.backgroundColor = `rgb(246 31 16)`;
+            health.className = "low-health";
           } else {
-            health.style.backgroundColor = `rgb(60, 246, 16)`;
+            health.className = "normal-health";
           }
 
           break;
@@ -628,14 +603,18 @@ function createFightPage() {
       createElement("span", "cross-span", cross);
       createElement("span", "cross-span", cross);
 
+      losesCount += 1;
+
       cross.addEventListener("click", () => {
-        characterHealthLeft = gamer[0].health;
-        num = Math.floor(Math.random() * 7);
-        gamer[0].num = num;
-        gamer[0].characterHealthLeft = characterHealthLeft;
+        enemyHealthLeft = enemies.enemyArr[num].health;
+        enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+        gamer[0].characterHealthLeft = gamer[0].health;
         gamer[0].process = "";
         gamer[0].attackItem = 0;
         gamer[0].defenseItem = [];
+        gamer[0].loses = losesCount;
+        num = Math.floor(Math.random() * 7);
+        gamer[0].num = num;
         localStorage.setItem("character", JSON.stringify(gamer));
 
         body.innerHTML = "";
@@ -653,14 +632,18 @@ function createFightPage() {
       createElement("span", "cross-span", cross);
       createElement("span", "cross-span", cross);
 
+      winsCount += 1;
+
       cross.addEventListener("click", () => {
         enemyHealthLeft = enemies.enemyArr[num].health;
+        enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
         num = Math.floor(Math.random() * 7);
         gamer[0].num = num;
         gamer[0].process = "";
         gamer[0].attackItem = 0;
         gamer[0].defenseItem = [];
-        enemies.enemyArr[num].enemyHealthLeft = enemyHealthLeft;
+        gamer[0].wins = winsCount;
+        gamer[0].characterHealthLeft = gamer[0].health;
         localStorage.setItem("character", JSON.stringify(gamer));
 
         body.innerHTML = "";
@@ -701,6 +684,8 @@ if (button) {
             process: "",
             attackItem: 0,
             defenseItem: [],
+            loses: 0,
+            wins: 0,
           },
           {
             enemyArr: [
@@ -751,8 +736,8 @@ if (button) {
                 enemyHealthLeft: 200,
                 attack: ["Body", "Belly", "Legs"],
                 defense: ["Neck", "Body", "Belly"],
-                damage: 25,
-                criticalDamage: 30,
+                damage: 20,
+                criticalDamage: 25,
               },
               {
                 name: "Waterblight Ganon",
@@ -771,8 +756,8 @@ if (button) {
                 enemyHealthLeft: 300,
                 attack: ["Head", "Body", "Legs"],
                 defense: ["Head", "Body", "Neck", "Belly"],
-                damage: 30,
-                criticalDamage: 35,
+                damage: 25,
+                criticalDamage: 30,
               },
             ],
           },
