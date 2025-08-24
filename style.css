@@ -135,6 +135,10 @@ body {
   margin: 3%;
 }
 
+.button_save {
+  padding: 2%;
+}
+
 .choose-character-img {
   max-width: 280px;
   max-height: 340px;
