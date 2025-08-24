@@ -306,7 +306,11 @@ function createFightPage() {
   health.setAttribute("max", "200");
   health.setAttribute("value", `${characterHealthLeft}`);
 
-  health.style.border = "1px solid #000";
+  if (characterHealthLeft <= 30) {
+    health.className = "low-health";
+  } else {
+    health.className = "normal-health";
+  }
 
   const attack = createElement("div", "attack-block", fight);
 
@@ -391,6 +395,12 @@ function createFightPage() {
   healthEnemy.setAttribute("value", `${enemyHealthLeft}`);
   const separator = createElement("div", "separator", body);
 
+  if (enemyHealthLeft <= 30) {
+    healthEnemy.className = "low-health";
+  } else {
+    healthEnemy.className = "normal-health";
+  }
+
   const process = createElement("div", "process-of-fight", body);
   process.innerHTML = gamer[0].process;
 
@@ -454,8 +464,6 @@ function createFightPage() {
         defenseChecked += 1;
       }
     });
-
-    console.log(attackChecked, defenseChecked);
 
     if (attackChecked !== 1 || defenseChecked !== 2) {
       attackButton.style.boxShadow =
